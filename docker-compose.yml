@@ -20,5 +20,15 @@ services:
     restart: always
     depends_on:
       - db
+  pgadmin:
+    image: dpage/pgadmin4
+    restart: always
+    environment:
+      PGADMIN_DEFAULT_EMAIL: esteban@gmail.com
+      PGADMIN_DEFAULT_PASSWORD: 123456
+    ports:
+      - 3001:80
+    depends_on:
+      - db
 volumes:
   postgres_data:

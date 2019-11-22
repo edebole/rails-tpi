@@ -10,15 +10,35 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_11_22_184134) do
+ActiveRecord::Schema.define(version: 2019_11_22_201511) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "clients", force: :cascade do |t|
+    t.string "cuil_cuit"
+    t.string "email"
+    t.string "name"
+    t.bigint "vat_condition_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["vat_condition_id"], name: "index_clients_on_vat_condition_id"
+  end
+
+  create_table "contact_phones", force: :cascade do |t|
+    t.string "phone"
+    t.bigint "client_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["client_id"], name: "index_contact_phones_on_client_id"
+  end
 
   create_table "items", force: :cascade do |t|
     t.string "state"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.bigint "product_id", null: false
+    t.index ["product_id"], name: "index_items_on_product_id"
   end
 
   create_table "products", force: :cascade do |t|
@@ -26,11 +46,27 @@ ActiveRecord::Schema.define(version: 2019_11_22_184134) do
     t.string "description"
     t.text "detail"
     t.decimal "unit_price"
-    t.bigint "items_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["items_id"], name: "index_products_on_items_id"
   end
 
-  add_foreign_key "products", "items", column: "items_id"
+  create_table "users", force: :cascade do |t|
+    t.string "username"
+    t.string "password"
+    t.string "token"
+    t.datetime "token_created_at"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "vat_conditions", force: :cascade do |t|
+    t.string "code"
+    t.string "description"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  add_foreign_key "clients", "vat_conditions"
+  add_foreign_key "contact_phones", "clients"
+  add_foreign_key "items", "products"
 end
