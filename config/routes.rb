@@ -1,10 +1,8 @@
 Rails.application.routes.draw do
-  resources :users
-  resources :contact_phones
-  resources :clients
-  resources :vat_conditions
-  resources :products, as: :productos, path: "productos" do
-    resources :items
+  post 'usuarios', to: 'users#create'
+  post 'sesiones', to: 'authentication#login'
+  resources :products, only: [:index, :show], as: :productos, path: "productos"  do
+    resources :items, only: [:index, :create]
   end
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
 end
