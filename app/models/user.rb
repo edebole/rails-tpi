@@ -8,12 +8,8 @@ class User < ApplicationRecord
     self.token_created_at = time
     self.save
   end
-  def valid_token?
-    now = DateTime.now.to_time
-    ut = self.token_created_at.to_time
-    ((now - ut) / 1.minutes) < 30
-  end
+  
   def init
-    self.update_token = DateTime.now if self.update_token.nil?
+    self.token_created_at = DateTime.now if self.token_created_at.nil?
   end
 end
