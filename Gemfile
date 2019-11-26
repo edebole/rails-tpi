@@ -9,26 +9,24 @@ gem 'rails', '~> 6.0.1'
 gem 'pg', '>= 0.18', '< 2.0'
 # Use Puma as the app server
 gem 'puma', '~> 4.1'
-# Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
-# gem 'jbuilder', '~> 2.7'
 # Use Active Model has_secure_password
 gem 'bcrypt', '~> 3.1.7'
 
 # Reduces boot times through caching; required in config/boot.rb
 gem 'bootsnap', '>= 1.4.2', require: false
-gem 'active_model_serializers', '~> 0.10.10' #Json:Api
-gem 'aasm', '~> 5.0.6' #pattern state
-gem 'jwt', '~> 2.2.1' #for json token
+# Response model json
+gem 'active_model_serializers', '~> 0.10.10' 
+# pattern state
+gem 'aasm', '~> 5.0.6' 
+# json web token RSA512
+gem 'jwt', '~> 2.2.1' 
 
 # Use Rack CORS for handling Cross-Origin Resource Sharing (CORS), making cross-origin AJAX possible
 # gem 'rack-cors'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
-  gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
   gem 'rspec-rails', '~> 3.9.0'
-  gem 'factory_bot_rails', '~> 5.1.0'
-  gem 'faker', '~> 2.7.0'
 end
 
 group :development do
@@ -36,7 +34,16 @@ group :development do
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'spring'
   gem 'spring-watcher-listen', '~> 2.0.0'
+  gem 'web-console', '~> 4.0.1'
 end
 
+group :test do
+  gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
+  gem 'factory_bot_rails', '~> 5.1.0'
+  gem 'shoulda-matchers', '~> 4.1.2'
+  gem 'faker', '~> 2.7.0'
+  gem 'database_cleaner', '~> 1.7.0'
+  gem 'simplecov', '~> 0.17.1'
+end
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 #gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
