@@ -4,11 +4,10 @@ class ProductsController < ApplicationController
 
   # GET /products
   def index
-    #@products = Product.all
     records_limit = 25
     scarce_limit = 5
 
-    case params[:q]
+    case filter
     when 'in_stock'
       @products = Product.in_stock(records_limit)
     when 'scarce'
@@ -18,7 +17,8 @@ class ProductsController < ApplicationController
     else
       @products = Product.in_stock(records_limit)
     end
-    render json: @products, status:200
+
+    render json: @products, status: :ok
   end
 
   # GET /products/1
@@ -46,5 +46,9 @@ class ProductsController < ApplicationController
     # Only allow a trusted parameter "white list" through.
     def product_params
       params.require(:product).permit(:unique_code, :description, :detail, :unit_price, :items_id)
+    end
+
+    def filter
+      params[:q]
     end
 end

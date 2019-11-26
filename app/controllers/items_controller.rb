@@ -1,4 +1,5 @@
 class ItemsController < ApplicationController
+  before_action :set_product
 
   # GET /productos/:producto_id/items
   def index
@@ -9,18 +10,26 @@ class ItemsController < ApplicationController
 
   # POST /productos/:producto_id/items
   def create
-    @item = Item.new(item_params)
-
-    if @item.save
-      render json: @item, status: :created, location: @item
+    if quantity > 0
+      quantity.times{
+        @product.items.create!()
+      }
+      render json: @product, status: :created
     else
-      render json: @item.errors, status: :unprocessable_entity
+      render json: {error: {title: "quantity cannot be less than 1"}}, status: :unprocessable_entity
     end
   end
 
   private
     # Only allow a trusted parameter "white list" through.
     def item_params
-      params.require(:item).permit(:state)
+      params.require(:item).permit(:quantity, :producto_id)
+    end
+    def set_product
+      @product = Product.find(params[:producto_id])
+    end
+
+    def quantity
+      params[:quantity]
     end
 end

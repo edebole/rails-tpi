@@ -1,5 +1,7 @@
 class Product < ApplicationRecord
   has_many :items
+
+  ## ClassMethods to search params
   def self.in_stock(records_limit)
     self.joins(:items).group(:id).having("COUNT(product_id) >= 1").order(:id).limit(records_limit)
   end
@@ -9,4 +11,5 @@ class Product < ApplicationRecord
   def self.all_limit(records_limit)
     self.all.order(:id).limit(records_limit)
   end
+
 end
