@@ -10,6 +10,19 @@ services:
       POSTGRES_PASSWORD: 123456
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+  db_test:
+    image: postgres:12
+    restart: always
+    environment:
+      POSTGRES_DB: app_test
+      POSTGRES_USER: app_test
+      POSTGRES_PASSWORD: 123456
+    volumes:
+      - postgres_data_test:/var/lib/postgresql/data
+    ports:
+      - "5433:5432"
   web:
     build: .
     command: bash -c "rm -f tmp/pids/server.pid && bundle exec rails s -p 3000 -b '0.0.0.0'"
@@ -20,15 +33,6 @@ services:
     restart: always
     depends_on:
       - db
-  pgadmin:
-    image: dpage/pgadmin4
-    restart: always
-    environment:
-      PGADMIN_DEFAULT_EMAIL: esteban@gmail.com
-      PGADMIN_DEFAULT_PASSWORD: 123456
-    ports:
-      - 3001:80
-    depends_on:
-      - db
 volumes:
   postgres_data:
+  postgres_data_test:

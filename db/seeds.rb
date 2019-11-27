@@ -8,25 +8,26 @@
 require 'faker'
 
 for i in 1..30 do
-	Product.create(
-		unique_code: Faker::Alphanumeric.alphanumeric(number: 9, min_alpha: 3, min_numeric: 6),
-		description: Faker::Commerce.product_name, 
-		detail: Faker::Lorem.paragraph, 
-		unit_price: Faker::Commerce.price )
+  Product.create(
+    unique_code: Faker::Alphanumeric.alphanumeric(number: 9, min_alpha: 3, min_numeric: 6),
+    description: Faker::Commerce.product_name, 
+    detail: Faker::Lorem.paragraph, 
+    unit_price: Faker::Commerce.price 
+  )
 end
 
 for i in 1..120 do
-	Item.create(
-		state: "Disponible", 
-		product_id: Faker::Number.within(range: 1..30))
+  Item.create(
+    state: "Disponible", 
+    product_id: Faker::Number.within(range: 1..30)
+  )
 end
 
 for i in 1..5 do
-	Client.create(cuil_cuit: Faker::Number.number(digits: 10), email: Faker::Internet.email, name: Faker::Name.name, vat_condition_id: Faker::Number.within(range: 1..14))
-end
-
-for i in 1..5 do
-	ContactPhone.create(phone: Faker::PhoneNumber.cell_phone, client_id: i)
+  User.create(
+    username: Faker::Internet.username(specifier: 5..8), 
+    password: Faker::Internet.password(min_length: 6, max_length: 8)
+  )
 end
 
 VatCondition.create(code: 1, description: "IVA Responsable Inscripto")
@@ -43,3 +44,52 @@ VatCondition.create(code: 11, description: "IVA Responsable Inscripto – Agente
 VatCondition.create(code: 12, description: "Pequeño Contribuyente Eventual")
 VatCondition.create(code: 13, description: "Monotributista Social")
 VatCondition.create(code: 14, description: "Pequeño Contribuyente Eventual Social")
+
+for i in 1..5 do
+  Client.create(
+    cuil_cuit: Faker::Number.number(digits: 10), 
+    email: Faker::Internet.email, 
+    name: Faker::Name.name, 
+    vat_condition_id: Faker::Number.within(range: 1..14)
+  )
+end
+
+for i in 1..5 do
+    ContactPhone.create(
+      phone: Faker::PhoneNumber.cell_phone, 
+      client_id: i
+    )
+end
+
+for i in 1..5 do
+  Reservation.create(
+    client_id: Faker::Number.within(range: 1..5),
+    user_id: Faker::Number.within(range: 1..5),
+    reservation_date: Faker::Time.backward(days: 14, period: :evening) 
+  )
+end
+
+for i in 1..25 do
+  ReservationDetail.create(
+    item_id: Faker::Number.within(range: 1..120),
+    reservation_id: Faker::Number.within(range: 1..5),
+    price: Faker::Commerce.price
+  )
+end
+
+for i in 1..5 do
+  Sell.create(
+    client_id: Faker::Number.within(range: 1..5),
+    user_id: Faker::Number.within(range: 1..5),
+    sell_date: Faker::Time.backward(days: 14, period: :evening),
+    reservation_id: Faker::Number.within(range: 1..5)
+  )
+end
+
+for i in 1..25 do
+  SellDetail.create!(
+    item_id: Faker::Number.within(range: 1..120),
+    sell_id: Faker::Number.within(range: 1..5),
+    price: Faker::Commerce.price
+  )
+end

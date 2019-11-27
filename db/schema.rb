@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_11_25_025236) do
+ActiveRecord::Schema.define(version: 2019_11_27_054246) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -50,6 +50,48 @@ ActiveRecord::Schema.define(version: 2019_11_25_025236) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
+  create_table "reservation_details", force: :cascade do |t|
+    t.bigint "item_id", null: false
+    t.bigint "reservation_id", null: false
+    t.decimal "price"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["item_id"], name: "index_reservation_details_on_item_id"
+    t.index ["reservation_id"], name: "index_reservation_details_on_reservation_id"
+  end
+
+  create_table "reservations", force: :cascade do |t|
+    t.bigint "client_id", null: false
+    t.bigint "user_id", null: false
+    t.datetime "reservation_date"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["client_id"], name: "index_reservations_on_client_id"
+    t.index ["user_id"], name: "index_reservations_on_user_id"
+  end
+
+  create_table "sell_details", force: :cascade do |t|
+    t.bigint "item_id", null: false
+    t.bigint "sell_id", null: false
+    t.decimal "price"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["item_id"], name: "index_sell_details_on_item_id"
+    t.index ["sell_id"], name: "index_sell_details_on_sell_id"
+  end
+
+  create_table "sells", force: :cascade do |t|
+    t.bigint "client_id", null: false
+    t.bigint "user_id", null: false
+    t.bigint "reservation_id"
+    t.datetime "sell_date"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["client_id"], name: "index_sells_on_client_id"
+    t.index ["reservation_id"], name: "index_sells_on_reservation_id"
+    t.index ["user_id"], name: "index_sells_on_user_id"
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "username"
     t.string "password_digest"
@@ -67,4 +109,13 @@ ActiveRecord::Schema.define(version: 2019_11_25_025236) do
   add_foreign_key "clients", "vat_conditions"
   add_foreign_key "contact_phones", "clients"
   add_foreign_key "items", "products"
+  add_foreign_key "reservation_details", "items"
+  add_foreign_key "reservation_details", "reservations"
+  add_foreign_key "reservations", "clients"
+  add_foreign_key "reservations", "users"
+  add_foreign_key "sell_details", "items"
+  add_foreign_key "sell_details", "sells"
+  add_foreign_key "sells", "clients"
+  add_foreign_key "sells", "reservations"
+  add_foreign_key "sells", "users"
 end

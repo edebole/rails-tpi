@@ -3,7 +3,6 @@ class ItemsController < ApplicationController
 
   # GET /productos/:producto_id/items
   def index
-    # @items = Item.all
     @product = Product.find(params[:producto_id])
     render json: @product.items
   end

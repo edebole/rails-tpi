@@ -1,12 +1,12 @@
 class ProductsController < ApplicationController
   before_action :set_product, only: :show
-  before_action :authorize_request
+  #before_action :authorize_request
 
   # GET /products
   def index
     records_limit = 25
     scarce_limit = 5
-
+    ## filter is the search parameter
     case filter
     when 'in_stock'
       @products = Product.in_stock(records_limit)
