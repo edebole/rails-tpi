@@ -12,4 +12,8 @@ class Product < ApplicationRecord
     self.all.order(:id).limit(records_limit)
   end
 
+  ## Instance methods
+  def items_available
+    self.items.where(state: 'disponible').count
+  end
 end

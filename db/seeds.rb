@@ -18,7 +18,6 @@ end
 
 for i in 1..120 do
   Item.create(
-    state: "Disponible", 
     product_id: Faker::Number.within(range: 1..30)
   )
 end
