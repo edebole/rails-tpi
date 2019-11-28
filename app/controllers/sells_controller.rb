@@ -1,11 +1,11 @@
 class SellsController < ApplicationController
   before_action :set_sell, only: [:show, :update, :destroy]
+  before_action :authorize_request
 
   # GET /sells
   def index
-    @sells = Sell.all
-
-    render json: @sells
+    @sells = Sell.all_for_user(@current_user.id)
+    render json: @sells, each_serializer: SellSerializer, status: :ok
   end
 
   # GET /sells/1

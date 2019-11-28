@@ -1,6 +1,10 @@
 class SellSerializer < ActiveModel::Serializer
-  attributes :id, :sell_date
-  has_one :client
-  has_one :user
-  has_one :reservation
+  attributes :sell_date, :client_name, :total
+  
+  def client_name
+    object.client.name
+  end
+  def total
+    object.sell_details.sum(:price)
+  end
 end

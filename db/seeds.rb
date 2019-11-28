@@ -25,7 +25,7 @@ end
 for i in 1..5 do
   User.create(
     username: Faker::Internet.username(specifier: 5..8), 
-    password: Faker::Internet.password(min_length: 6, max_length: 8)
+    password: 'password'
   )
 end
 
@@ -76,19 +76,19 @@ for i in 1..25 do
   )
 end
 
-for i in 1..5 do
+# sells without assigned reservations
+for i in 1..3 do
   Sell.create(
     client_id: Faker::Number.within(range: 1..5),
     user_id: Faker::Number.within(range: 1..5),
     sell_date: Faker::Time.backward(days: 14, period: :evening),
-    reservation_id: Faker::Number.within(range: 1..5)
   )
 end
 
-for i in 1..25 do
-  SellDetail.create!(
+for i in 1..12 do
+  SellDetail.create(
     item_id: Faker::Number.within(range: 1..120),
-    sell_id: Faker::Number.within(range: 1..5),
+    sell_id: Faker::Number.within(range: 1..3),
     price: Faker::Commerce.price
   )
 end

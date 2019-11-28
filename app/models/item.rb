@@ -2,6 +2,8 @@ class Item < ApplicationRecord
   belongs_to :product
   has_many :reservation_details
   has_many :reservations, through: :reservation_details
+  has_many :sell_details
+  has_many :sells, through: :sell_details
 
 
   # current price
@@ -11,7 +13,7 @@ class Item < ApplicationRecord
 
   include AASM
   # whiny_transitions to not exceptions, return true or false 
-  aasm column: "state", aasm whiny_transitions: false do
+  aasm column: "state", whiny_transitions: false do
     state :disponible, initial: true
     state :reservado, :vendido
 

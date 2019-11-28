@@ -16,7 +16,7 @@ ActiveRecord::Schema.define(version: 2019_11_27_054246) do
   enable_extension "plpgsql"
 
   create_table "clients", force: :cascade do |t|
-    t.string "cuil_cuit"
+    t.string "cuil_cuit", null: false
     t.string "email"
     t.string "name"
     t.bigint "vat_condition_id", null: false
@@ -26,7 +26,7 @@ ActiveRecord::Schema.define(version: 2019_11_27_054246) do
   end
 
   create_table "contact_phones", force: :cascade do |t|
-    t.string "phone"
+    t.string "phone", null: false
     t.bigint "client_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
@@ -34,7 +34,7 @@ ActiveRecord::Schema.define(version: 2019_11_27_054246) do
   end
 
   create_table "items", force: :cascade do |t|
-    t.string "state"
+    t.string "state", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.bigint "product_id", null: false
@@ -42,10 +42,10 @@ ActiveRecord::Schema.define(version: 2019_11_27_054246) do
   end
 
   create_table "products", force: :cascade do |t|
-    t.string "unique_code"
+    t.string "unique_code", null: false
     t.string "description"
     t.text "detail"
-    t.decimal "unit_price"
+    t.decimal "unit_price", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
@@ -93,14 +93,14 @@ ActiveRecord::Schema.define(version: 2019_11_27_054246) do
   end
 
   create_table "users", force: :cascade do |t|
-    t.string "username"
-    t.string "password_digest"
+    t.string "username", null: false
+    t.string "password_digest", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
 
   create_table "vat_conditions", force: :cascade do |t|
-    t.string "code"
+    t.string "code", null: false
     t.string "description"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
