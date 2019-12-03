@@ -1,5 +1,5 @@
 class ReservationsController < ApplicationController
-  before_action :set_reservation, only: [:show, :update, :destroy]
+  before_action :set_reservation, only: [:show, :update, :destroy, :sell]
   #before_action :authorize_request
 
   # GET /reservas
@@ -32,41 +32,28 @@ class ReservationsController < ApplicationController
     end
   end
 
-  # PATCH/PUT /reservas/1
-  def update
-    if @reservation.update(reservation_params)
-      render json: @reservation
+  # DELETE /reservas/1
+  def destroy
+    unless @reservation.sell?
+      @reservation.items.map do |item|
+        item.cancel!
+      end
+      @reservation.destroy
+      render json: @reservation, status: :no_content
     else
-      render json: @reservation.errors, status: :unprocessable_entity
+      raise ActiveRecord::RecordInvalid
     end
   end
 
-  # DELETE /reservas/1
-  def destroy
-    @reservation.destroy
-  end
-
   def sell
-    is_sell = Sell.where({reservation_id: self.id})
-    if is_sell.none?
-      teko.transaction do
-        Sell.create!(
-          client_id: teko.client_id,
-          user_id: teko.user_id,
-          reservation_id: teko.id,
-          sell_date: Time.now,
-        )
-        current_sell = Sell.last
-        teko.items.each do |item|
-          item.sell!
-          SellDetail.create!(
-            item_id: item.id, 
-            sell_id: current_sell.id, 
-            price: teko.reservation_details.find_by_item_id(item.id).price)
-        end
+    unless @reservation.sell?
+      @reservation.transaction do
+        current_sell = create_sell(@reservation)
+        sell_items(current_sell, @reservation)
       end
+      render json: @reservation, status: :created
     else
-      render json: @reservation.errors, status: :unprocessable_entity
+      raise ActiveRecord::RecordInvalid
     end
   end
 
@@ -82,5 +69,24 @@ class ReservationsController < ApplicationController
     end
     def compound
       params[:include]
+    end
+    def create_sell(reservation)
+      sell = Sell.create!(
+        client_id: reservation.client_id,
+        user_id: reservation.user_id,
+        reservation_id: reservation.id,
+        sell_date: Time.now,
+      )
+      sell.id
+    end
+    def sell_items(sell_id,reservation)
+      reservation.items.map do |item|
+          item.sell!
+          SellDetail.create!(
+            item_id: item.id, 
+            sell_id: sell_id, 
+            price: reservation.reservation_details.find_by_item_id(item.id).price
+          )
+      end
     end
 end

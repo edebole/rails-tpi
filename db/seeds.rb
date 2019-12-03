@@ -8,7 +8,7 @@
 require 'faker'
 
 for i in 1..30 do
-  Product.create(
+  Product.create!(
     unique_code: Faker::Alphanumeric.alphanumeric(number: 9, min_alpha: 3, min_numeric: 6),
     description: Faker::Commerce.product_name, 
     detail: Faker::Lorem.paragraph, 
@@ -17,35 +17,35 @@ for i in 1..30 do
 end
 
 for i in 1..120 do
-  Item.create(
+  Item.create!(
     product_id: Faker::Number.within(range: 1..30)
   )
 end
 
 for i in 1..5 do
-  User.create(
+  User.create!(
     username: Faker::Internet.username(specifier: 5..8), 
     password: 'password'
   )
 end
 
-VatCondition.create(code: 1, description: "IVA Responsable Inscripto")
-VatCondition.create(code: 2, description: "IVA Responsable no Inscripto")
-VatCondition.create(code: 3, description: "IVA no Responsable")
-VatCondition.create(code: 4, description: "IVA Sujeto Exento")
-VatCondition.create(code: 5, description: "Consumidor Final")
-VatCondition.create(code: 6, description: "Responsable Monotributo")
-VatCondition.create(code: 7, description: "Sujeto no Categorizado")
-VatCondition.create(code: 8, description: "Proveedor del Exterior")
-VatCondition.create(code: 9, description: "Cliente del Exterior")
-VatCondition.create(code: 10, description: "IVA Liberado – Ley Nº 19.640")
-VatCondition.create(code: 11, description: "IVA Responsable Inscripto – Agente de Percepción")
-VatCondition.create(code: 12, description: "Pequeño Contribuyente Eventual")
-VatCondition.create(code: 13, description: "Monotributista Social")
-VatCondition.create(code: 14, description: "Pequeño Contribuyente Eventual Social")
+VatCondition.create!(code: 1, description: "IVA Responsable Inscripto")
+VatCondition.create!(code: 2, description: "IVA Responsable no Inscripto")
+VatCondition.create!(code: 3, description: "IVA no Responsable")
+VatCondition.create!(code: 4, description: "IVA Sujeto Exento")
+VatCondition.create!(code: 5, description: "Consumidor Final")
+VatCondition.create!(code: 6, description: "Responsable Monotributo")
+VatCondition.create!(code: 7, description: "Sujeto no Categorizado")
+VatCondition.create!(code: 8, description: "Proveedor del Exterior")
+VatCondition.create!(code: 9, description: "Cliente del Exterior")
+VatCondition.create!(code: 10, description: "IVA Liberado – Ley Nº 19.640")
+VatCondition.create!(code: 11, description: "IVA Responsable Inscripto – Agente de Percepción")
+VatCondition.create!(code: 12, description: "Pequeño Contribuyente Eventual")
+VatCondition.create!(code: 13, description: "Monotributista Social")
+VatCondition.create!(code: 14, description: "Pequeño Contribuyente Eventual Social")
 
 for i in 1..5 do
-  Client.create(
+  Client.create!(
     cuil_cuit: Faker::Number.number(digits: 10), 
     email: Faker::Internet.email, 
     name: Faker::Name.name, 
@@ -54,14 +54,14 @@ for i in 1..5 do
 end
 
 for i in 1..5 do
-    ContactPhone.create(
+    ContactPhone.create!(
       phone: Faker::PhoneNumber.cell_phone, 
       client_id: i
     )
 end
 
 for i in 1..5 do
-  Reservation.create(
+  Reservation.create!(
     client_id: Faker::Number.within(range: 1..5),
     user_id: Faker::Number.within(range: 1..5),
     reservation_date: Faker::Time.backward(days: 14, period: :evening) 
@@ -69,7 +69,7 @@ for i in 1..5 do
 end
 
 for i in 1..25 do
-  ReservationDetail.create(
+  ReservationDetail.create!(
     item_id: Faker::Number.within(range: 1..120),
     reservation_id: Faker::Number.within(range: 1..5),
     price: Faker::Commerce.price
@@ -78,7 +78,7 @@ end
 
 # sells without assigned reservations
 for i in 1..3 do
-  Sell.create(
+  Sell.create!(
     client_id: Faker::Number.within(range: 1..5),
     user_id: Faker::Number.within(range: 1..5),
     sell_date: Faker::Time.backward(days: 14, period: :evening),
@@ -86,7 +86,7 @@ for i in 1..3 do
 end
 
 for i in 1..12 do
-  SellDetail.create(
+  SellDetail.create!(
     item_id: Faker::Number.within(range: 1..120),
     sell_id: Faker::Number.within(range: 1..3),
     price: Faker::Commerce.price

@@ -5,12 +5,21 @@ class SellsController < ApplicationController
   # GET /sells
   def index
     @sells = Sell.all_for_user(@current_user.id)
-    render json: @sells, each_serializer: SellSerializer, status: :ok
+    render json: @sells, status: :ok
   end
 
   # GET /sells/1
   def show
-    render json: @sell
+    if @sell.user_id == @current_user.id
+      case compound
+      when 'items'
+        render json: @sell, include: :items, status: :ok
+      else
+        render json: @sell, status: :ok
+      end
+    else
+      raise ActiveRecord::RecordNotFound
+    end
   end
 
   # POST /sells
@@ -48,4 +57,8 @@ class SellsController < ApplicationController
     def sell_params
       params.require(:sell).permit(:client_id, :user_id, :reservation_id, :sell_date)
     end
+    def compound
+      params[:include]
+    end
+
 end

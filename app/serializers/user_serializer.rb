@@ -1,3 +1,5 @@
 class UserSerializer < ActiveModel::Serializer
-  attributes :id, :username, :password, :token, :token_created_at
+  attributes :id, :username
+  has_many :reservations
+  has_many :sells
 end
