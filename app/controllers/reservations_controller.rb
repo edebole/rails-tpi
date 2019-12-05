@@ -39,12 +39,13 @@ class ReservationsController < ApplicationController
         item.cancel!
       end
       @reservation.destroy
-      render json: @reservation, status: :no_content
+      render json: @reservation, status: :gone
     else
-      raise ActiveRecord::RecordInvalid
+      raise ActiveRecord::RecordInvalid 
     end
   end
 
+  # PUT /reservas/1
   def sell
     unless @reservation.sell?
       @reservation.transaction do
@@ -65,11 +66,13 @@ class ReservationsController < ApplicationController
 
     # Only allow a trusted parameter "white list" through.
     def reservation_params
-      params.require(:reservation).permit(:references, :references, :reservation_date)
+      params.require(:reservation).permit(:client_id)
     end
+
     def compound
       params[:include]
     end
+
     def create_sell(reservation)
       sell = Sell.create!(
         client_id: reservation.client_id,
@@ -79,6 +82,7 @@ class ReservationsController < ApplicationController
       )
       sell.id
     end
+
     def sell_items(sell_id,reservation)
       reservation.items.map do |item|
           item.sell!
@@ -89,4 +93,5 @@ class ReservationsController < ApplicationController
           )
       end
     end
+
 end

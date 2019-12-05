@@ -32,21 +32,7 @@ class SellsController < ApplicationController
       render json: @sell.errors, status: :unprocessable_entity
     end
   end
-
-  # PATCH/PUT /sells/1
-  def update
-    if @sell.update(sell_params)
-      render json: @sell
-    else
-      render json: @sell.errors, status: :unprocessable_entity
-    end
-  end
-
-  # DELETE /sells/1
-  def destroy
-    @sell.destroy
-  end
-
+  
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_sell
