@@ -1,6 +1,6 @@
 class ReservationsController < ApplicationController
   before_action :set_reservation, only: [:show, :update, :destroy, :sell]
-  #before_action :authorize_request
+  before_action :authorize_request
 
   # GET /reservas
   def index
@@ -11,7 +11,7 @@ class ReservationsController < ApplicationController
 
   # GET /reservas/:id
   def show
-    case compound
+    case params[:include]
     when 'items'
       render json: @reservation, include: :items, status: :ok
     when 'sell'
@@ -23,12 +23,21 @@ class ReservationsController < ApplicationController
 
   # POST /reservas
   def create
-    @reservation = Reservation.new(reservation_params)
-
-    if @reservation.save
-      render json: @reservation, status: :created, location: @reservation
+    # @reservation = Reservation.new(reservation_params)
+    reservation = PostReservation.new(client_id: reservation_params[:client_id], user_id:           @current_user.id)
+    if reservation.valid?
+      Reservation.transaction do
+        reservation = reservation.create_reservations
+        reservation_details = PostReservationDetail.new(products: reservation_params[:products], reservation_id: reservation.id)
+        if reservation_details.valid?
+          reservation_details = reservation_details.create_detail
+          render json: reservation, status: :created
+        else
+          render json: reservation_details.errors, status: :unprocessable_entity
+        end
+      end
     else
-      render json: @reservation.errors, status: :unprocessable_entity
+     render json: reservation.errors, status: :unprocessable_entity
     end
   end
 
@@ -66,11 +75,7 @@ class ReservationsController < ApplicationController
 
     # Only allow a trusted parameter "white list" through.
     def reservation_params
-      params.require(:reservation).permit(:client_id)
-    end
-
-    def compound
-      params[:include]
+      params.require(:reservation).permit(:client_id, products: [:product_id, :quantity])
     end
 
     def create_sell(reservation)

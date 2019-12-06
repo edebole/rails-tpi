@@ -14,6 +14,6 @@ class Product < ApplicationRecord
 
   ## Instance methods
   def items_available
-    self.items.where(state: 'disponible').count
+    self.items.where(state: 'disponible')
   end
 end

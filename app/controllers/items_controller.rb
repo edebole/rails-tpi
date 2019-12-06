@@ -9,13 +9,12 @@ class ItemsController < ApplicationController
 
   # POST /productos/:producto_id/items
   def create
-    if quantity > 0
-      quantity.times{
-        @product.items.create!()
-      }
+    product=PostItem.new(product_id:params[:producto_id], quantity: params[:quantity])
+    if product.valid?
+      product.create_items()
       render json: @product, status: :created
     else
-      render json: {error: {title: "quantity cannot be less than 1"}}, status: :unprocessable_entity
+      render json: product.errors, status: :unprocessable_entity
     end
   end
 
@@ -26,9 +25,5 @@ class ItemsController < ApplicationController
     end
     def set_product
       @product = Product.find(params[:producto_id])
-    end
-
-    def quantity
-      params[:quantity]
     end
 end

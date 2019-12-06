@@ -30,8 +30,4 @@ class Item < ApplicationRecord
     end
   end
 
-  private
-    def foo
-      p "vendido"
-    end
 end
