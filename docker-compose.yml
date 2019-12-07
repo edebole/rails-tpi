@@ -5,7 +5,8 @@ services:
     image: postgres:12
     restart: always
     environment:
-      POSTGRES_DB: app
+      POSTGRES_MULTIPLE_DATABASES: app,app_test
+      #POSTGRES_DB: app
       POSTGRES_USER: app  
       POSTGRES_PASSWORD: 123456
     volumes:
