@@ -2,13 +2,13 @@ class SellsController < ApplicationController
   before_action :set_sell, only: [:show, :update, :destroy]
   before_action :authorize_request
 
-  # GET /sells
+  # GET /ventas
   def index
     @sells = Sell.all_for_user(@current_user.id)
     render json: @sells, status: :ok
   end
 
-  # GET /sells/1
+  # GET /ventas/1
   def show
     if @sell.user_id == @current_user.id
       case compound
@@ -22,14 +22,17 @@ class SellsController < ApplicationController
     end
   end
 
-  # POST /sells
+  # POST /ventas
   def create
-    @sell = Sell.new(sell_params)
-
-    if @sell.save
-      render json: @sell, status: :created, location: @sell
+    sell = PostSell.new(sell_params)
+    if sell.valid?
+      Sell.transaction do
+        sell = sell.create_sell(@current_user.id)
+        sell.sell_items(sell_params[:products])
+        render json: sell, status: :created
+      end
     else
-      render json: @sell.errors, status: :unprocessable_entity
+      render json: sell.errors, status: :unprocessable_entity
     end
   end
   
@@ -41,7 +44,7 @@ class SellsController < ApplicationController
 
     # Only allow a trusted parameter "white list" through.
     def sell_params
-      params.require(:sell).permit(:client_id, :user_id, :reservation_id, :sell_date)
+      params.require(:sell).permit(:client_id, products: [:product_id, :quantity])
     end
     def compound
       params[:include]

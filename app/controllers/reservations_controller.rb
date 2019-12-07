@@ -35,7 +35,7 @@ class ReservationsController < ApplicationController
     end
   end
 
-  # DELETE /reservas/1
+  # DELETE /reservas/:id
   def destroy
     unless @reservation.sell?
       @reservation.items.map do |item|
@@ -48,7 +48,7 @@ class ReservationsController < ApplicationController
     end
   end
 
-  # PUT /reservas/1
+  # PUT /reservas/:id/vender
   def sell
     unless @reservation.sell?
       @reservation.transaction do
