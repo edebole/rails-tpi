@@ -23,21 +23,15 @@ class ReservationsController < ApplicationController
 
   # POST /reservas
   def create
-    # @reservation = Reservation.new(reservation_params)
-    reservation = PostReservation.new(client_id: reservation_params[:client_id], user_id:           @current_user.id)
+    reservation = PostReservation.new(reservation_params)
     if reservation.valid?
       Reservation.transaction do
-        reservation = reservation.create_reservations
-        reservation_details = PostReservationDetail.new(products: reservation_params[:products], reservation_id: reservation.id)
-        if reservation_details.valid?
-          reservation_details = reservation_details.create_detail
-          render json: reservation, status: :created
-        else
-          render json: reservation_details.errors, status: :unprocessable_entity
-        end
+        reservation = reservation.create_reservation(@current_user.id)
+        reservation.reserve_items(reservation_params[:products])
+        render json: reservation, status: :created
       end
     else
-     render json: reservation.errors, status: :unprocessable_entity
+      render json: reservation.errors, status: :unprocessable_entity
     end
   end
 
@@ -48,7 +42,7 @@ class ReservationsController < ApplicationController
         item.cancel!
       end
       @reservation.destroy
-      render json: @reservation, status: :gone
+      render json: @reservation, status: :ok
     else
       raise ActiveRecord::RecordInvalid 
     end
@@ -58,8 +52,9 @@ class ReservationsController < ApplicationController
   def sell
     unless @reservation.sell?
       @reservation.transaction do
-        current_sell = create_sell(@reservation)
-        sell_items(current_sell, @reservation)
+        current_sell = @reservation.create_sell
+
+        @reservation.sell_items(current_sell.id)
       end
       render json: @reservation, status: :created
     else
@@ -76,27 +71,6 @@ class ReservationsController < ApplicationController
     # Only allow a trusted parameter "white list" through.
     def reservation_params
       params.require(:reservation).permit(:client_id, products: [:product_id, :quantity])
-    end
-
-    def create_sell(reservation)
-      sell = Sell.create!(
-        client_id: reservation.client_id,
-        user_id: reservation.user_id,
-        reservation_id: reservation.id,
-        sell_date: Time.now,
-      )
-      sell.id
-    end
-
-    def sell_items(sell_id,reservation)
-      reservation.items.map do |item|
-          item.sell!
-          SellDetail.create!(
-            item_id: item.id, 
-            sell_id: sell_id, 
-            price: reservation.reservation_details.find_by_item_id(item.id).price
-          )
-      end
     end
 
 end

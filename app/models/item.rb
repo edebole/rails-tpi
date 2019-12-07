@@ -22,7 +22,7 @@ class Item < ApplicationRecord
     end
 
     event :sell do
-      transitions from: [:disponible, :reservado], to: :vendido, success: :foo
+      transitions from: [:disponible, :reservado], to: :vendido
     end
 
     event :cancel do

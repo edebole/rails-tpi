@@ -10,7 +10,39 @@ class Reservation < ApplicationRecord
   def self.not_sell
     self.includes(:sell).where(sells: { reservation_id: nil })
   end
+  
   def sell?
     Sell.where({reservation_id: self.id}).exists?
   end
+
+  def reserve_items(products)
+    products.map do |prod|
+      prod[:quantity].times {
+        item = Product.find(prod[:product_id]).items_available.first
+        item.reserve!
+        ReservationDetail.create!(reservation_id: self.id, item_id:item.id, price: item.price)
+      }
+    end
+  end
+
+  def create_sell()
+    sell = Sell.create!(
+      client_id: self.client_id,
+      user_id: self.user_id,
+      reservation_id: self.id,
+      sell_date: Time.now,
+    )
+  end
+
+  def sell_items(sell_id)
+    self.items.each do |item|
+        item.sell!
+        SellDetail.create!(
+          item_id: item.id, 
+          sell_id: sell_id, 
+          price: self.reservation_details.find_by_item_id(item.id).price
+        )
+    end
+  end
+
 end
