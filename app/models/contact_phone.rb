@@ -3,5 +3,4 @@ class ContactPhone < ApplicationRecord
   validates :phone,
     format: { with: /\A[0-9]*\z/, message: "must contain valid phone number"},
     length: { minimum: 8 }, presence:true
-  validates :client, numericality: { only_integer: true, greater_than: 0 }
 end

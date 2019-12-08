@@ -4,7 +4,7 @@ class Reservation < ApplicationRecord
   has_many :products, through: :items
   belongs_to :user
   belongs_to :client
-  #belongs_to :sell, required: false
+  belongs_to :sell, required: false
 
   validates :client_id, :user_id, numericality: { only_integer: true, greater_than: 0 }
 
@@ -14,8 +14,9 @@ class Reservation < ApplicationRecord
   end
   
   def sell?
-    Sell.where({reservation_id: self.id}).exists?
+    !self.sell.nil?
   end
+
 
   def reserve_items(products)
     products.map do |prod|
@@ -28,7 +29,7 @@ class Reservation < ApplicationRecord
   end
 
   def create_sell()
-    sell = Sell.create!(
+    Sell.create!(
       client_id: self.client_id,
       user_id: self.user_id,
       reservation_id: self.id,

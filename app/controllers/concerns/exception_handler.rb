@@ -1,11 +1,11 @@
 module ExceptionHandler
-  # provides the more graceful `included` method
   extend ActiveSupport::Concern
   class AuthenticationError < StandardError; end
   class MissingToken < StandardError; end
   class InvalidToken < StandardError; end
   class ExpiredSignature < StandardError; end
   class DecodeError < StandardError; end
+  class ReservationSold < StandardError; end
 
   included do
     rescue_from ActiveRecord::RecordInvalid, with: :four_twenty_two
@@ -14,6 +14,7 @@ module ExceptionHandler
     rescue_from ExceptionHandler::InvalidToken, with: :four_twenty_two
     rescue_from ExceptionHandler::ExpiredSignature, with: :four_ninety_eight
     rescue_from ExceptionHandler::DecodeError, with: :four_zero_one
+    rescue_from ExceptionHandler::ReservationSold, with: :sold
     rescue_from ActiveRecord::RecordNotFound do |e|
      render json: { errors: {message: e.message }}, status: :not_found
     end
@@ -44,4 +45,7 @@ module ExceptionHandler
     render json: { errors: { token: e.message }}, status: :unauthorized
   end
   
+  def sold
+    render json: {"errors": {"reservation": "reservation has already been sold"}}, status: :unprocessable_entity
+  end
 end

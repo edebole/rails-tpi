@@ -6,7 +6,7 @@ class Item < ApplicationRecord
   has_many :sells, through: :sell_details
 
   validates :state, inclusion: { in: %w(disponible reservado vendido), message: "%{value} is not a valid state" }
-
+  validates :product_id, presence: true
 
   # current price
   def price

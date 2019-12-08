@@ -64,10 +64,12 @@ ActiveRecord::Schema.define(version: 2019_11_27_054246) do
     t.bigint "client_id", null: false
     t.bigint "user_id", null: false
     t.datetime "reservation_date"
+    t.bigint "sell_id", null: true
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["client_id"], name: "index_reservations_on_client_id"
     t.index ["user_id"], name: "index_reservations_on_user_id"
+    t.index ["sell_id"], name: "index_reservations_on_sell_id"
   end
 
   create_table "sell_details", force: :cascade do |t|
@@ -113,6 +115,7 @@ ActiveRecord::Schema.define(version: 2019_11_27_054246) do
   add_foreign_key "reservation_details", "reservations"
   add_foreign_key "reservations", "clients"
   add_foreign_key "reservations", "users"
+  add_foreign_key "reservations", "sells"
   add_foreign_key "sell_details", "items"
   add_foreign_key "sell_details", "sells"
   add_foreign_key "sells", "clients"

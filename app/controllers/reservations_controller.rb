@@ -1,6 +1,6 @@
 class ReservationsController < ApplicationController
   before_action :set_reservation, only: [:show, :update, :destroy, :sell]
-  before_action :authorize_request
+  #before_action :authorize_request
 
   # GET /reservas
   def index
@@ -44,7 +44,7 @@ class ReservationsController < ApplicationController
       @reservation.destroy
       render json: @reservation, status: :ok
     else
-      raise ActiveRecord::RecordInvalid 
+      raise ExceptionHandler::ReservationSold
     end
   end
 
@@ -53,12 +53,13 @@ class ReservationsController < ApplicationController
     unless @reservation.sell?
       @reservation.transaction do
         current_sell = @reservation.create_sell
-
+        @reservation.sell_id = current_sell.id
+        @reservation.save
         @reservation.sell_items(current_sell.id)
       end
       render json: @reservation, status: :created
     else
-      raise ActiveRecord::RecordInvalid
+      raise ExceptionHandler::ReservationSold
     end
   end
 

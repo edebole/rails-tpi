@@ -24,7 +24,7 @@ end
 
 for i in 1..5 do
   User.create!(
-    username: Faker::Internet.username(specifier: 5..8), 
+    username: Faker::Internet.username(specifier: 5..8, separators: %w(.)), 
     password: 'password'
   )
 end
@@ -46,7 +46,7 @@ VatCondition.create!(code: 14, description: "Pequeño Contribuyente Eventual Soc
 
 for i in 1..5 do
   Client.create!(
-    cuil_cuit: Faker::Number.number(digits: 10), 
+    cuil_cuit: Faker::Number.number(digits: 11), 
     email: Faker::Internet.email, 
     name: Faker::Name.name, 
     vat_condition_id: Faker::Number.within(range: 1..14)
@@ -55,7 +55,7 @@ end
 
 for i in 1..5 do
     ContactPhone.create!(
-      phone: Faker::PhoneNumber.cell_phone, 
+      phone: Faker::Number.number(digits: 10), 
       client_id: i
     )
 end

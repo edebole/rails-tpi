@@ -5,17 +5,17 @@ class Client < ApplicationRecord
   has_many :sells
 
   validates :cuil_cuit, 
-      format: { with: /\b(20|23|24|27|30|33|34)(\D)?[0-9]{8}(\D)?[0-9]/ ,
-                message: "must contain valid cuit|cuil"},
+      # format: { with: /\b(20|23|24|27|30|33|34)(\D)?[0-9]{8}(\D)?[0-9]/ ,
+      #           message: "must contain valid cuit|cuil"},
       presence: true, 
       uniqueness: true, 
       length: {is: 11}
 
-  validates :mail,
+  validates :email,
     format: { with: URI::MailTo::EMAIL_REGEXP },
     presence: true
     
   validates :name,
-    format: { with: /\A[a-zA-Z\s]*\z/, message: "must contain only letters"}
+    format: { with: /\A[a-zA-Z.']+(?:\s[a-zA-Z.']+)*\s?\z/, message: "must contain only letters"}
     
 end
