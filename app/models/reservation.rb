@@ -4,11 +4,13 @@ class Reservation < ApplicationRecord
   has_many :products, through: :items
   belongs_to :user
   belongs_to :client
-  has_one :sell, required: false
+  #belongs_to :sell, required: false
+
+  validates :client_id, :user_id, numericality: { only_integer: true, greater_than: 0 }
 
   ## use for index controller
   def self.not_sell
-    self.includes(:sell).where(sells: { reservation_id: nil })
+    self.all.select{ |r| !r.sell? }
   end
   
   def sell?

@@ -6,6 +6,8 @@ class Sell < ApplicationRecord
   belongs_to :user
   belongs_to :reservation, required: false
 
+  validates :client_id, :user_id, numericality: { only_integer: true, greater_than: 0 }
+
   def self.all_for_user(id_user)
     self.where({user_id: id_user})
   end
