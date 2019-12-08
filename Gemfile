@@ -23,7 +23,7 @@ gem 'jwt', '~> 2.2.1'
 
 # Use Rack CORS for handling Cross-Origin Resource Sharing (CORS), making cross-origin AJAX possible
 # gem 'rack-cors'
-
+gem 'faker', '~> 2.7.0'
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'rspec-rails', '~> 3.9.0'
@@ -41,7 +41,6 @@ group :test do
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
   gem 'factory_bot_rails', '~> 5.1.0'
   gem 'shoulda-matchers', '~> 4.1.2'
-  gem 'faker', '~> 2.7.0'
   gem 'database_cleaner', '~> 1.7.0'
   gem 'simplecov', '~> 0.17.1'
 end
