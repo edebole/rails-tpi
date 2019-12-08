@@ -1,5 +1,8 @@
 # Trabajo Final Integrador - TTPS Ruby 2019
 
+## Link to app
+- [Heroku](https://inventory-management-tpi.herokuapp.com/)
+
 ## Dependencias
 - [Git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git)
 - Docker [linux](https://docs.docker.com/v17.09/engine/installation/linux/docker-ce/ubuntu/) [mac](https://docs.docker.com/v17.09/docker-for-mac/install/)
