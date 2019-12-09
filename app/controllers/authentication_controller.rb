@@ -4,7 +4,7 @@ class AuthenticationController < ApplicationController
 
   # POST /sesiones
   def login
-    if @user && @user.authenticate(params[:password])
+    if @user && @user.authenticate(login_params[:password])
       token = JsonWebToken.encode(user_id: @user.id)
       time = time = Time.now + 30.minutes.to_i
       render json: { token: token, exp: time.strftime("%m-%d-%Y %H:%M"),
@@ -17,11 +17,11 @@ class AuthenticationController < ApplicationController
   private
 
   def set_user
-    @user = User.find_by!(username: params[:username])	  
+    @user = User.find_by!(username: login_params[:username])	  
   end
 
   def login_params
-    params.require(:username).permit(:username, :password)
+    params.require(:login).permit(:username, :password)
   end
 end
 

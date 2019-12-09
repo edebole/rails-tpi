@@ -3,7 +3,7 @@ class ReservationSerializer < ActiveModel::Serializer
   belongs_to :client
   belongs_to :user
   belongs_to :sell
-  has_many :items
+  has_many :products
 
   def client_name
     object.client.name

@@ -5,7 +5,7 @@ class PostItem
   validates :product_id, :quantity, presence:true, numericality: { only_integer: true, greater_than: 0 } 
 
   def create_items
-    quantity.times{
+    quantity.to_i.times{
         product.items.create!()
       }
   end

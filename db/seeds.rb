@@ -24,7 +24,7 @@ end
 
 for i in 1..5 do
   User.create!(
-    username: Faker::Internet.username(specifier: 5..8, separators: %w(.)), 
+    username: Faker::Internet.username(specifier: 5..8), 
     password: 'password'
   )
 end

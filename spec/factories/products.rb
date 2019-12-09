@@ -1,9 +1,8 @@
 FactoryBot.define do
   factory :product do
-    unique_code { "MyString" }
-    description { "MyString" }
-    detail { "MyText" }
-    unit_price { "9.99" }
-    items { nil }
+    unique_code { Faker::Alphanumeric.alphanumeric(number: 9, min_alpha: 3, min_numeric: 6) }
+    description { Faker::Commerce.product_name }
+    detail { Faker::Lorem.paragraph }
+    unit_price { Faker::Commerce.price }
   end
 end

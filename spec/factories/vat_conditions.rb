@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :vat_condition do
-    code { "MyString" }
-    description { "MyString" }
+    code {1}
+    description { "IVA Responsable Inscripto" }
   end
 end

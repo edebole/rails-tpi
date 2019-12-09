@@ -1,5 +1,5 @@
 FactoryBot.define do
   factory :item do
-    state { "MyString" }
+    state { "disponible" }
   end
 end

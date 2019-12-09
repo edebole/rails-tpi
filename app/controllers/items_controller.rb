@@ -9,7 +9,7 @@ class ItemsController < ApplicationController
 
   # POST /productos/:producto_id/items
   def create
-    product=PostItem.new(product_id:params[:producto_id], quantity: params[:quantity])
+    product=PostItem.new(product_id:params[:producto_id], quantity: item_params[:quantity])
     if product.valid?
       product.create_items()
       render json: @product, status: :created

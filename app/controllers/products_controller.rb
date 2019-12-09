@@ -4,20 +4,17 @@ class ProductsController < ApplicationController
 
   # GET /products
   def index
-    records_limit = 25
-    scarce_limit = 5
-    ## filter is the search parameter
-    case filter
+    ## search is a parameter
+    case search
     when 'in_stock'
-      @products = Product.in_stock(records_limit)
+      @products = Product.in_stock
     when 'scarce'
-      @products = Product.scarce(records_limit,scarce_limit)
+      @products = Product.scarce
     when 'all'
-      @products = Product.all_limit(records_limit)
+      @products = Product.all_limit
     else
-      @products = Product.in_stock(records_limit)
+      @products = Product.in_stock
     end
-
     render json: @products, status: :ok
   end
 
@@ -38,7 +35,7 @@ class ProductsController < ApplicationController
       params.require(:product).permit(:unique_code, :description, :detail, :unit_price, :items_id)
     end
 
-    def filter
+    def search
       params[:q]
     end
 end

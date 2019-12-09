@@ -25,12 +25,24 @@ require 'rails_helper'
 
 RSpec.describe ReservationsController, type: :controller do
 
+
+  before(:each) do
+    @user = FactoryBot.create(:user)
+    @client = FactoryBot.create(:client)
+    @token = JsonWebToken.encode(user_id: @user.id)
+    request.env['HTTP_AUTHORIZATION'] = @token 
+  end
   # This should return the minimal set of attributes required to create a valid
   # Reservation. As you add validations to Reservation, be sure to
   # adjust the attributes here as well.
   let(:valid_attributes) {
-    skip("Add a hash of attributes valid for your model")
+    { :client_id => @client.id, :user_id => @user.id, :reservation_date => Time.now}
   }
+
+  let(:valid_attributes_reserve){
+    {:client_id => @client.id, :products => [:product_id => 1, :quantity => 1]} 
+  }
+
 
   let(:invalid_attributes) {
     skip("Add a hash of attributes invalid for your model")
@@ -61,16 +73,14 @@ RSpec.describe ReservationsController, type: :controller do
     context "with valid params" do
       it "creates a new Reservation" do
         expect {
-          post :create, params: {reservation: valid_attributes}, session: valid_session
+          post :create, params: {reservation: valid_attributes_reserve}, session: valid_session
         }.to change(Reservation, :count).by(1)
       end
 
       it "renders a JSON response with the new reservation" do
 
-        post :create, params: {reservation: valid_attributes}, session: valid_session
+        post :create, params: {reservation: valid_attributes_reserve}, session: valid_session
         expect(response).to have_http_status(:created)
-        expect(response.content_type).to eq('application/json')
-        expect(response.location).to eq(reservation_url(Reservation.last))
       end
     end
 
@@ -79,12 +89,11 @@ RSpec.describe ReservationsController, type: :controller do
 
         post :create, params: {reservation: invalid_attributes}, session: valid_session
         expect(response).to have_http_status(:unprocessable_entity)
-        expect(response.content_type).to eq('application/json')
       end
     end
   end
 
-  describe "PUT #update" do
+  describe "PUT #sell" do
     context "with valid params" do
       let(:new_attributes) {
         skip("Add a hash of attributes valid for your model")
@@ -92,7 +101,7 @@ RSpec.describe ReservationsController, type: :controller do
 
       it "updates the requested reservation" do
         reservation = Reservation.create! valid_attributes
-        put :update, params: {id: reservation.to_param, reservation: new_attributes}, session: valid_session
+        put :sell, params: {id: reservation.to_param, reservation: new_attributes}, session: valid_session
         reservation.reload
         skip("Add assertions for updated state")
       end
@@ -100,9 +109,8 @@ RSpec.describe ReservationsController, type: :controller do
       it "renders a JSON response with the reservation" do
         reservation = Reservation.create! valid_attributes
 
-        put :update, params: {id: reservation.to_param, reservation: valid_attributes}, session: valid_session
-        expect(response).to have_http_status(:ok)
-        expect(response.content_type).to eq('application/json')
+        put :sell, params: {id: reservation.to_param, reservation: valid_attributes}, session: valid_session
+        expect(response).to have_http_status(:created)
       end
     end
 
@@ -110,9 +118,8 @@ RSpec.describe ReservationsController, type: :controller do
       it "renders a JSON response with errors for the reservation" do
         reservation = Reservation.create! valid_attributes
 
-        put :update, params: {id: reservation.to_param, reservation: invalid_attributes}, session: valid_session
+        put :sell, params: {id: reservation.to_param, reservation: invalid_attributes}, session: valid_session
         expect(response).to have_http_status(:unprocessable_entity)
-        expect(response.content_type).to eq('application/json')
       end
     end
   end
