@@ -39,7 +39,7 @@ Una vez hecho esto, se podrá acceder al sitio desde http://localhost:3000
 {
     "user": {
         "username": "test",
-        "password": "test"
+        "password": "password"
     }
 }
 ```
@@ -48,7 +48,7 @@ Una vez hecho esto, se podrá acceder al sitio desde http://localhost:3000
 
 {
     "login": {
-        "username": "laurie",
+        "username": "test",
         "password": "password"
     }
 }
