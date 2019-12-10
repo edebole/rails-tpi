@@ -29,6 +29,8 @@ RSpec.describe ItemsController, type: :controller do
   before(:each) do
     @product = FactoryBot.create(:product)
     @quantity = 3
+    @user = FactoryBot.create(:user)
+    @token = JsonWebToken.encode(user_id: @user.id)
     request.env['HTTP_AUTHORIZATION'] = @token 
   end
 

@@ -20,7 +20,7 @@ class Reservation < ApplicationRecord
 
   def reserve_items(products)
     products.map do |prod|
-      prod[:quantity].times {
+      prod[:quantity].to_i.times {
         item = Product.find(prod[:product_id]).items_available.first
         item.reserve!
         ReservationDetail.create!(reservation_id: self.id, item_id:item.id, price: item.price)
@@ -33,7 +33,6 @@ class Reservation < ApplicationRecord
       client_id: self.client_id,
       user_id: self.user_id,
       reservation_id: self.id,
-      sell_date: Time.now,
     )
   end
 

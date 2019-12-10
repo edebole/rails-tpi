@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  root to: redirect("/productos")
   post 'usuarios', to: 'users#create'
   post 'sesiones', to: 'authentication#login'
   resources :products, only: [:index, :show], as: :productos, path: "productos" do

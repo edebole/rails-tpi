@@ -31,21 +31,23 @@ RSpec.describe ReservationsController, type: :controller do
     @client = FactoryBot.create(:client)
     @token = JsonWebToken.encode(user_id: @user.id)
     request.env['HTTP_AUTHORIZATION'] = @token 
+    @product = FactoryBot.create(:product)
+    @product.items.create(product_id: @product.id)
   end
   # This should return the minimal set of attributes required to create a valid
   # Reservation. As you add validations to Reservation, be sure to
   # adjust the attributes here as well.
   let(:valid_attributes) {
-    { :client_id => @client.id, :user_id => @user.id, :reservation_date => Time.now}
+    { :client_id => @client.id, :user_id => @user.id}
   }
 
   let(:valid_attributes_reserve){
-    {:client_id => @client.id, :products => [:product_id => 1, :quantity => 1]} 
+    {:client_id => @client.id, :products => [:product_id => @product.id, :quantity => 1]} 
   }
 
 
   let(:invalid_attributes) {
-    skip("Add a hash of attributes invalid for your model")
+    {:client_id => 8, :products => [:product_id => @product.id, :quantity => -1]} 
   }
 
   # This should return the minimal set of values that should be in the session
@@ -118,7 +120,7 @@ RSpec.describe ReservationsController, type: :controller do
       it "renders a JSON response with errors for the reservation" do
         reservation = Reservation.create! valid_attributes
 
-        put :sell, params: {id: reservation.to_param, reservation: invalid_attributes}, session: valid_session
+        put :sell, params: {id: reservation.to_param}, session: valid_session
         expect(response).to have_http_status(:unprocessable_entity)
       end
     end

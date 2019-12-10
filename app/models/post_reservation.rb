@@ -8,7 +8,7 @@ class PostReservation
 
 
   def create_reservation(user)
-    Reservation.create!(client_id: client_id, user_id: user, reservation_date: Time.now)
+    Reservation.create!(client_id: client_id, user_id: user)
   end
 
 
@@ -19,7 +19,7 @@ class PostReservation
         unless Product.exists?(prod[:product_id]) 
           errors.add(:product_id, "Couldn't find Product with 'id'=#{prod[:product_id]}")
         else
-          if Product.find(prod[:product_id]).items_available.count < prod[:quantity]
+          if Product.find(prod[:product_id]).items_available.count < prod[:quantity].to_i
             errors.add(:quantity, "Not enough stock for Product 'id'=#{prod[:product_id]}")
           end
         end

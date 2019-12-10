@@ -1,5 +1,5 @@
 class ReservationSerializer < ActiveModel::Serializer
-  attributes :client_name, :reservation_date, :total
+  attributes :client_name, :created_at, :total
   belongs_to :client
   belongs_to :user
   belongs_to :sell

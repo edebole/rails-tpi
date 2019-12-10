@@ -1,5 +1,6 @@
 class ItemsController < ApplicationController
   before_action :set_product
+  before_action :authorize_request
 
   # GET /productos/:producto_id/items
   def index
