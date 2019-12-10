@@ -1,6 +1,6 @@
 # Trabajo Final Integrador - TTPS Ruby 2019
 
-## Link to app
+## Link a heroku
 - [Heroku](https://inventory-management-tpi.herokuapp.com/)
 
 ## Dependencias
@@ -32,15 +32,77 @@ docker-compose exec web rails db:setup
 
 Una vez hecho esto, se podrá acceder al sitio desde http://localhost:3000
 
+## Endpoints request body
+```
+- post /usuarios
+
+{
+    "user": {
+        "username": "test",
+        "password": "test"
+    }
+}
+```
+```
+- post /sesiones
+
+{
+    "login": {
+        "username": "laurie",
+        "password": "password"
+    }
+}
+```
+```
+- post /productos/:id/items
+{
+    "item": {
+        "quantity": 5
+    }
+}
+```
+```
+- post /reservas
+{
+    "reservation": {
+        "client_id": 1,
+        "products": [
+            {
+                "product_id": 8,
+                "quantity": 1
+            },
+            {
+                "product_id": 3,
+                "quantity": 2
+            }
+        ]
+    }
+}
+```
+```
+- post /ventas
+
+{
+    "sell": {
+        "client_id": 1,
+        "products": [
+            {
+                "product_id": 8,
+                "quantity": 1
+            },
+            {
+                "product_id": 3,
+                "quantity": 2
+            }
+        ]
+    }
+}
+```
+
 ## Corriendo los tests
 Para correr todos los tests juntos utilizando el comando:
 ```sh
 docker-compose exec web rails spec
-```
-Para correrlos uno por uno:
-```sh
-docker-compose exec web rails spec spec/models/product_spec.rb
-docker-compose exec web rails spec spec/models/item_spec.rb
 ```
 
 ## Eliminar
