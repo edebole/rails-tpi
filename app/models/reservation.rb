@@ -22,9 +22,8 @@ class Reservation < ApplicationRecord
     products.map do |prod|
       prod[:quantity].to_i.times {
         item = Product.find(prod[:product_id]).items_available.first
-        # las dos cosas siguientes deben ir en el modelo item
-        item.reserve!
-        ReservationDetail.create!(reservation_id: self.id, item_id:item.id, price: item.price)
+        # El modelo item es el encargado de reservarse y de crear un detalle con sus datos
+        item.create_detail(self.id)
       }
     end
   end

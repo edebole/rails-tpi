@@ -13,6 +13,11 @@ class Item < ApplicationRecord
     product.unit_price
   end
 
+  def create_detail(reservation_id)
+    self.reserve!
+    ReservationDetail.create!(reservation_id: reservation_id, item_id:self.id, price: self.price)
+  end
+  
   include AASM
   # whiny_transitions to not exceptions, return true or false 
   aasm column: "state", whiny_transitions: false do

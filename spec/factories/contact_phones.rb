@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :contact_phone do
-    phone { "MyString" }
-    client { nil }
+    phone { Faker::Number.number(digits: 10) }
+    association :clients, factory: :client
   end
 end
