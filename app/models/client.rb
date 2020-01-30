@@ -6,8 +6,7 @@ class Client < ApplicationRecord
 
   #validates :contact_phone, presence: true 
   validates :cuil_cuit, 
-      # format: { with: /\b(20|23|24|27|30|33|34)(\D)?[0-9]{8}(\D)?[0-9]/ ,
-      #           message: "must contain valid cuit|cuil"},
+      format: { with: /\b(20|23|24|27|30|33|34)(\D)?[0-9]{8}(\D)?[0-9]/ , message: "must contain valid cuit|cuil" },
       presence: true, 
       uniqueness: { case_sensitive: false }, 
       length: {is: 11}
@@ -15,7 +14,7 @@ class Client < ApplicationRecord
   validates :email,
     format: { with: URI::MailTo::EMAIL_REGEXP },
     uniqueness: true, 
-    presence: true }
+    presence: true 
 
   validates :name,
     format: { with: /\A[a-zA-Z.']+(?:\s[a-zA-Z.']+)*\s?\z/, message: "must contain only letters"}, presence: true
