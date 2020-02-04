@@ -37,29 +37,18 @@ class ReservationsController < ApplicationController
 
   # DELETE /reservas/:id
   def destroy
-    unless @reservation.sell?
-      @reservation.items.map do |item|
-        item.cancel!
-      end
-      @reservation.destroy
-      render json: @reservation, status: :ok
-    else
-      raise ExceptionHandler::ReservationSold
-    end
+    @reservation.cancel
+    render json: @reservation, status: :ok
   end
 
   # PUT /reservas/:id/vender
   def sell
-    unless @reservation.sell?
-      @reservation.transaction do
-        current_sell = @reservation.create_sell
-        @reservation.mark_as_sold(current_sell.id)
-        @reservation.sell_items(current_sell.id)
-      end
-      render json: @reservation, status: :created
-    else
-      raise ExceptionHandler::ReservationSold
+    @reservation.transaction do
+      current_sell = @reservation.create_sell
+      @reservation.mark_as_sold(current_sell.id)
+      @reservation.sell_items(current_sell.id)
     end
+    render json: @reservation, status: :created
   end
 
   private

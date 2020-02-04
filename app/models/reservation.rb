@@ -30,11 +30,15 @@ class Reservation < ApplicationRecord
   end
 
   def create_sell()
-    Sell.create!(
-      client_id: self.client_id,
-      user_id: self.user_id,
-      reservation_id: self.id,
-    )
+    unless self.sell?
+      Sell.create!(
+        client_id: self.client_id,
+        user_id: self.user_id,
+        reservation_id: self.id,
+      )
+    else
+      raise ExceptionHandler::ReservationSold
+    end
   end
 
   def mark_as_sold(sell_id)
@@ -50,6 +54,17 @@ class Reservation < ApplicationRecord
           sell_id: sell_id, 
           price: self.reservation_details.find_by_item_id(item.id).price
         )
+    end
+  end
+
+  def cancel
+    unless self.sell?
+      self.items.map do |item|
+        item.cancel!
+      end
+      self.destroy
+    else
+      raise ExceptionHandler::ReservationSold
     end
   end
 
