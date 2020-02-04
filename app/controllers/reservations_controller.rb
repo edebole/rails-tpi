@@ -53,8 +53,7 @@ class ReservationsController < ApplicationController
     unless @reservation.sell?
       @reservation.transaction do
         current_sell = @reservation.create_sell
-        @reservation.sell_id = current_sell.id
-        @reservation.save
+        @reservation.mark_as_sold(current_sell.id)
         @reservation.sell_items(current_sell.id)
       end
       render json: @reservation, status: :created

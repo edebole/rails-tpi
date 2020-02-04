@@ -7,6 +7,7 @@ class Reservation < ApplicationRecord
   belongs_to :sell, required: false
 
   validates :client_id, :user_id, numericality: { only_integer: true, greater_than: 0 }
+  validates :client_id, :user_id, presence:true
 
   ## use for index controller
   def self.not_sell
@@ -34,6 +35,11 @@ class Reservation < ApplicationRecord
       user_id: self.user_id,
       reservation_id: self.id,
     )
+  end
+
+  def mark_as_sold(sell_id)
+    self.sell_id = sell_id
+    self.save
   end
 
   def sell_items(sell_id)

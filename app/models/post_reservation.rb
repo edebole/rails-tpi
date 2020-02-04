@@ -7,8 +7,8 @@ class PostReservation
   validate :validate_items_available, :validate_exist_client
 
 
-  def create_reservation(user)
-    Reservation.create!(client_id: client_id, user_id: user)
+  def create_reservation(user_id)
+    Reservation.create!(client_id: client_id, user_id: user_id)
   end
 
 

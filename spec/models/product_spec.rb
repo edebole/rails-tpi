@@ -81,6 +81,8 @@ RSpec.describe Product, type: :model do
     context 'when this has items availables' do
       let!(:item) { 3.times { product.items.create } }
       it { product.items_available.should_not be_empty }
+      it { expect(product.items_available.count).to eq 3 }
+      it { expect(product.items_available.first.state).to eq 'disponible'}
     end
     context 'when this has no items availables' do
       it { product.items_available.should be_empty }
@@ -89,11 +91,12 @@ RSpec.describe Product, type: :model do
       let(:item) { product.items.create }
       let!(:item_reserverd) { item.reserve }
       it { product.items_available.should be_empty }
+      it { expect(product.items_available.count).to eq 0 }
     end
     context 'when this has all your items sold' do
       let(:item) { product.items.create }
       let!(:item_reserverd) { item.sell }
-      it { product.items_available.should be_empty }
+      it { expect(product.items_available.count).to eq 0 }
     end
   end
 end
