@@ -104,6 +104,10 @@ Para correr todos los tests juntos utilizando el comando:
 ```sh
 docker-compose exec web rails spec
 ```
+Para correr test de archivos especificos
+```sh
+docker-compose exec web rspec spec/folder/file_spec.rb
+```
 
 ## Eliminar
 Para finalizar es necesario ejecutar:

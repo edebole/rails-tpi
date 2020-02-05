@@ -16,10 +16,12 @@ for i in 1..30 do
   )
 end
 
-for i in 1..120 do
-  Item.create!(
-    product_id: Faker::Number.within(range: 1..30)
-  )
+for i in 1..30 do
+  3.times do 
+    Item.create!(
+      product_id: i
+    )
+  end
 end
 
 for i in 1..5 do
@@ -64,31 +66,47 @@ for i in 1..5 do
   Reservation.create!(
     client_id: Faker::Number.within(range: 1..5),
     user_id: Faker::Number.within(range: 1..5),
-    reservation_date: Faker::Time.backward(days: 14, period: :evening) 
   )
 end
 
-for i in 1..25 do
-  ReservationDetail.create!(
-    item_id: Faker::Number.within(range: 1..120),
-    reservation_id: Faker::Number.within(range: 1..5),
-    price: Faker::Commerce.price
-  )
+# create reservation_details
+for i in 1..5 do
+  Reservation.find(i).reserve_items([ { product_id: Product.find(i).id, quantity: '1' }, { product_id: Product.find(i+1).id, quantity: '1' } ])
 end
+
+# create sells with reservations
+for i in 1..3 do
+  sell = Reservation.find(i).create_sell
+  Reservation.find(i).mark_as_sold(sell.id)
+  Reservation.find(i).sell_items(sell.id)
+end
+
+
+# for i in 1..25 do
+#   ReservationDetail.create!(
+#     item_id: Faker::Number.within(range: 1..120),
+#     reservation_id: Faker::Number.within(range: 1..5),
+#     price: Faker::Commerce.price
+#   )
+# end
 
 # sells without assigned reservations
 for i in 1..3 do
   Sell.create!(
     client_id: Faker::Number.within(range: 1..5),
     user_id: Faker::Number.within(range: 1..5),
-    sell_date: Faker::Time.backward(days: 14, period: :evening),
   )
 end
 
-for i in 1..12 do
-  SellDetail.create!(
-    item_id: Faker::Number.within(range: 1..120),
-    sell_id: Faker::Number.within(range: 1..3),
-    price: Faker::Commerce.price
-  )
+
+for i in 1..3 do
+  Sell.find(i).sell_items([ { product_id: Product.find(i*2).id, quantity: '1' }, { product_id: Product.find(i*3).id, quantity: '1' } ])
 end
+
+# for i in 1..12 do
+#   SellDetail.create!(
+#     item_id: Faker::Number.within(range: 1..120),
+#     sell_id: Faker::Number.within(range: 1..3),
+#     price: Faker::Commerce.price
+#   )
+# end

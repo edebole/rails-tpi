@@ -22,9 +22,11 @@ class Reservation < ApplicationRecord
   def reserve_items(products)
     products.map do |prod|
       prod[:quantity].to_i.times {
-        item = Product.find(prod[:product_id]).items_available.first
-        # El modelo item es el encargado de reservarse y de crear un detalle con sus datos
-        item.create_detail(self.id)
+        unless Product.find(prod[:product_id]).items_available.empty?
+          item = Product.find(prod[:product_id]).items_available.first
+          # El modelo item es el encargado de reservarse y de crear un detalle con sus datos
+          item.create_reserve_detail(self.id)
+        end
       }
     end
   end
