@@ -89,13 +89,15 @@ RSpec.describe Product, type: :model do
     end
     context 'when this has all your items reserved' do
       let(:item) { product.items.create }
-      let!(:item_reserverd) { item.reserve }
+      let!(:item_reserverd) { item.reserve! }
       it { expect(product.items_available).to be_empty }
       it { expect(product.items_available.count).to eq 0 }
     end
     context 'when this has all your items sold' do
       let(:item) { product.items.create }
-      let!(:item_reserverd) { item.sell }
+      let(:item_reserverd) { item.sell! }
+      it { expect{item}.to change {product.items_available.count}.from(0).to(1) }
+      it { expect{item_reserverd}.to change { item.state }.from("disponible").to("vendido") }
       it { expect(product.items_available.count).to eq 0 }
     end
   end
