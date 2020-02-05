@@ -31,12 +31,12 @@ RSpec.describe Sell, type: :model do
     context 'when the user does not make any sales' do
       let(:user_two) {FactoryBot.create(:user)}
       let!(:sell) {Sell.create!(user_id: user_two.id, client_id:client.id)}
-      it { Sell.all_for_user(user.id).should be_empty}
+      it { expect(Sell.all_for_user(user.id)).to be_empty}
     end
 
     context 'when the user makes a sale' do
       let!(:sell) {Sell.create!(user_id: user.id, client_id:client.id)}
-      it {Sell.all_for_user(user.id).should_not be_empty}
+      it { expect(Sell.all_for_user(user.id)).to_not be_empty}
       it { expect(Sell.all_for_user(user.id).count).to eq 1 }
     end
 

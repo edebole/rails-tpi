@@ -26,7 +26,7 @@ end
 
 for i in 1..5 do
   User.create!(
-    username: Faker::Internet.username(specifier: 5..8), 
+    username: Faker::Internet.username(specifier: 5..8, separators: %w(_ -)), 
     password: 'password'
   )
 end
@@ -46,9 +46,10 @@ VatCondition.create!(code: 12, description: "Pequeño Contribuyente Eventual")
 VatCondition.create!(code: 13, description: "Monotributista Social")
 VatCondition.create!(code: 14, description: "Pequeño Contribuyente Eventual Social")
 
+cuils = ['20223459537','23337319537','24180731577','27170131369','30110321369']
 for i in 1..5 do
   Client.create!(
-    cuil_cuit: Faker::Number.number(digits: 11), 
+    cuil_cuit: cuils[i-1], 
     email: Faker::Internet.email, 
     name: Faker::Name.name, 
     vat_condition_id: Faker::Number.within(range: 1..14)

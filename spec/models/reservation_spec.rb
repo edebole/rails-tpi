@@ -36,7 +36,7 @@ RSpec.describe Reservation, type: :model do
     let!(:reservation_two) { Reservation.create!(user_id: user.id, client_id: client.id) }
 
     context 'when the reservation is not sold' do
-      it { Reservation.not_sell.should_not be_empty}
+      it { expect(Reservation.not_sell).to_not be_empty}
       it { expect(Reservation.not_sell.count).to eq 2 }
     end
 

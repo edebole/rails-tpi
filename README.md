@@ -48,7 +48,7 @@ Una vez hecho esto, se podrá acceder al sitio desde http://localhost:3000
 
 {
     "login": {
-        "username": "barney",
+        "username": "test",
         "password": "password"
     }
 }

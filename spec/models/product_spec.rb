@@ -35,12 +35,12 @@ RSpec.describe Product, type: :model do
   describe '.in_stock' do
 
     context 'when there is no stock for any product' do
-      it { Product.in_stock.should be_empty } 
+      it { expect(Product.in_stock).to be_empty } 
     end
     context 'when there is stock for some product' do
       let(:product) { FactoryBot.create(:product) }
       let!(:item) { product.items.create }
-      it { Product.in_stock.should_not be_empty }
+      it { expect(Product.in_stock).to_not be_empty }
     end
 
   end
@@ -48,17 +48,17 @@ RSpec.describe Product, type: :model do
   describe '.scarce' do
 
     context 'when there is no stock for any product' do
-      it {Product.scarce.should be_empty}
+      it { expect(Product.scarce).to be_empty }
     end
     context 'when stock is between 1 and 5' do
       let(:product) { FactoryBot.create(:product) }
       let!(:item) { 3.times { product.items.create} }
-      it { Product.scarce.should_not be_empty }
+      it { expect(Product.scarce).to_not be_empty }
     end
     context 'when the stock is greather that 5' do
       let(:product) { FactoryBot.create(:product) }
       let!(:item) { 6.times { product.items.create} }
-      it { Product.scarce.should be_empty }
+      it { expect(Product.scarce).to be_empty }
     end
   end
 
@@ -66,12 +66,12 @@ RSpec.describe Product, type: :model do
 
     context 'when the product has no stock' do
       let!(:product) { FactoryBot.create(:product) }
-      it { Product.all_limit.should_not be_empty } 
+      it { expect(Product.all_limit).to_not be_empty } 
     end
     context 'when the product has stock' do
       let(:product) { FactoryBot.create(:product) }
       let!(:item) { product.items.create }
-      it { Product.all_limit.should_not be_empty }
+      it { expect(Product.all_limit).to_not be_empty }
     end
 
   end
@@ -80,17 +80,17 @@ RSpec.describe Product, type: :model do
     let(:product) { FactoryBot.create(:product) }
     context 'when this has items availables' do
       let!(:item) { 3.times { product.items.create } }
-      it { product.items_available.should_not be_empty }
+      it { expect(product.items_available).to_not be_empty }
       it { expect(product.items_available.count).to eq 3 }
       it { expect(product.items_available.first.state).to eq 'disponible'}
     end
     context 'when this has no items availables' do
-      it { product.items_available.should be_empty }
+      it { expect(product.items_available).to be_empty }
     end
     context 'when this has all your items reserved' do
       let(:item) { product.items.create }
       let!(:item_reserverd) { item.reserve }
-      it { product.items_available.should be_empty }
+      it { expect(product.items_available).to be_empty }
       it { expect(product.items_available.count).to eq 0 }
     end
     context 'when this has all your items sold' do
