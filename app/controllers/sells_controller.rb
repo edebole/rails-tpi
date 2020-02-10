@@ -10,7 +10,8 @@ class SellsController < ApplicationController
 
   # GET /ventas/1
   def show
-    if @sell.user_id == @current_user.id
+    if @sell.user_is_owner?(@current_user.id)
+      # compound is a parameter
       case compound
       when 'items'
         render json: @sell, include: :items, status: :ok
@@ -18,12 +19,13 @@ class SellsController < ApplicationController
         render json: @sell, status: :ok
       end
     else
-      raise ActiveRecord::RecordNotFound
+      raise ExceptionHandler::NotOwner
     end
   end
 
   # POST /ventas
   def create
+    # Class PostSell is used to validate that the parameters entered are valid
     sell = PostSell.new(sell_params)
     if sell.valid?
       Sell.transaction do
@@ -46,6 +48,7 @@ class SellsController < ApplicationController
     def sell_params
       params.require(:sell).permit(:client_id, products: [:product_id, :quantity])
     end
+
     def compound
       params[:include]
     end

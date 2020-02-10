@@ -13,7 +13,7 @@ class PostReservation
 
 
   private
-
+    # valid if the product and stock exists
     def validate_items_available
       products.map do |prod|
         unless Product.exists?(prod[:product_id]) 

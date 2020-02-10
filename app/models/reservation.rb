@@ -14,11 +14,12 @@ class Reservation < ApplicationRecord
     self.all.select{ |r| !r.sell? }
   end
   
+
   def sell?
     !self.sell.nil?
   end
 
-
+  # create the necessary relationships to create the item reservation detail
   def reserve_items(products)
     products.map do |prod|
       prod[:quantity].to_i.times {
@@ -31,6 +32,7 @@ class Reservation < ApplicationRecord
     end
   end
 
+  # create a sale from the current reservation
   def create_sell()
     unless self.sell?
       Sell.create!(
@@ -48,6 +50,7 @@ class Reservation < ApplicationRecord
     self.save
   end
 
+  # create the necessary relationships to create the item sell detail
   def sell_items(sell_id)
     self.items.each do |item|
         item.sell!
@@ -59,6 +62,7 @@ class Reservation < ApplicationRecord
     end
   end
 
+  # delete the current reservation and its items become available
   def cancel
     unless self.sell?
       self.items.map do |item|

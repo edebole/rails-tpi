@@ -4,7 +4,7 @@ class ProductsController < ApplicationController
 
   # GET /products
   def index
-    ## search is a parameter
+    # search is a parameter
     case search
     when 'in_stock'
       @products = Product.in_stock

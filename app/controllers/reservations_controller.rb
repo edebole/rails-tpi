@@ -5,7 +5,6 @@ class ReservationsController < ApplicationController
   # GET /reservas
   def index
     @reservations = Reservation.not_sell
-
     render json: @reservations, status: :ok
   end
 
@@ -23,6 +22,7 @@ class ReservationsController < ApplicationController
 
   # POST /reservas
   def create
+    # Class PostReservation is used to validate that the parameters entered are valid
     reservation = PostReservation.new(reservation_params)
     if reservation.valid?
       Reservation.transaction do

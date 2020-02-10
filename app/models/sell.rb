@@ -12,6 +12,7 @@ class Sell < ApplicationRecord
     self.where({user_id: id_user})
   end
 
+  # # create the necessary relationships to create the item sell detail
   def sell_items(products)
     products.map do |prod|
       prod[:quantity].to_i.times {
@@ -21,6 +22,10 @@ class Sell < ApplicationRecord
         end
       }
     end
+  end
+
+  def user_is_owner?(user_id)
+    self.user_id == user_id
   end
 
 end

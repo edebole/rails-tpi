@@ -22,6 +22,6 @@ class Product < ApplicationRecord
 
   ## Instance methods
   def items_available
-    self.items.select{ |i| i.state == 'disponible'}
+    self.items.where(state: 'disponible')
   end
 end

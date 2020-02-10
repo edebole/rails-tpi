@@ -10,9 +10,10 @@ class ItemsController < ApplicationController
 
   # POST /productos/:producto_id/items
   def create
+    # Class PostItem is used to validate that the parameters entered are valid
     product=PostItem.new(product_id:params[:producto_id], quantity: item_params[:quantity])
     if product.valid?
-      product.create_items()
+      product.create_items
       render json: @product, status: :created
     else
       render json: product.errors, status: :unprocessable_entity
