@@ -17,11 +17,11 @@ class AuthenticationController < ApplicationController
   private
 
   def set_user
-    @user = User.find_by!(username: login_params[:username])	  
+    @user = User.find_by(username: login_params[:username])	  
   end
 
   def login_params
-    params.require(:login).permit(:username, :password)
+    params.require(:authentication).permit(:username, :password)
   end
 end
 

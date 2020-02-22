@@ -47,7 +47,7 @@ Una vez hecho esto, se podrá acceder al sitio desde http://localhost:3000
 - post /sesiones
 
 {
-    "login": {
+    "authentication": {
         "username": "test",
         "password": "password"
     }
