@@ -1,12 +1,20 @@
-FROM ruby:2.6.5
-RUN apt-get update -qq && apt-get install -y build-essential libpq-dev nodejs
+FROM ruby:2.6.5-alpine
 
-RUN mkdir /app
+RUN apk update \
+  && apk upgrade \
+  && apk add --update --no-cache \
+  build-base curl-dev git postgresql-dev \
+  yaml-dev zlib-dev nodejs yarn tzdata
+
 WORKDIR /app
 
-COPY Gemfile /app/Gemfile
-COPY Gemfile.lock /app/Gemfile.lock
+COPY Gemfile* /app/
+
 RUN gem install bundler:2.0.2
+
 RUN bundle install
 
 COPY . /app
+
+# Clean APK cache
+RUN rm -rf /var/cache/apk/*
