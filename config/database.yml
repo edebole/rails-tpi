@@ -87,6 +87,8 @@ test:
 #
 production:
   <<: *default
-  database: stock_control_production
-  username: stock_control
-  password: <%= ENV['STOCK_CONTROL_DATABASE_PASSWORD'] %>
+  database: app
+  username: app
+  password: 123456
+  host: localhost
+  port: 5432
