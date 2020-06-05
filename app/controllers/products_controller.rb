@@ -23,8 +23,8 @@ class ProductsController < ApplicationController
     render json: @product
   end
 
-
   private
+
     # Use callbacks to share common setup or constraints between actions.
     def set_product
       @product = Product.find(params[:id])
@@ -32,7 +32,8 @@ class ProductsController < ApplicationController
 
     # Only allow a trusted parameter "white list" through.
     def product_params
-      params.require(:product).permit(:unique_code, :description, :detail, :unit_price, :items_id)
+      params.require(:product).permit(:unique_code, :description, :detail,
+                                      :unit_price, :items_id)
     end
 
     def search
