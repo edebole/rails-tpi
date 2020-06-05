@@ -18,3 +18,7 @@ COPY . /app
 
 # Clean APK cache
 RUN rm -rf /var/cache/apk/*
+
+EXPOSE 3000
+
+CMD ["rails", "server", "-b", "0.0.0.0", "-p", "3000"]
